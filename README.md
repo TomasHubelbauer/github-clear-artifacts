@@ -22,6 +22,8 @@ If you're targetting organizational repositories, ensure personal access token
 access for the repositories is enabled:
 https://docs.github.com/en/organizations/managing-programmatic-access-to-your-organization/setting-a-personal-access-token-policy-for-your-organization
 
+Also switch Resource Owner to the organization and not the user.
+
 - Go to https://github.com/settings/tokens?type=beta
 - Click on *Generate new token*
 - Name it - I chose the name `artifact-clean-up`
