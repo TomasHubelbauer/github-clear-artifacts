@@ -23,6 +23,11 @@ access for the repositories is enabled:
 https://docs.github.com/en/organizations/managing-programmatic-access-to-your-organization/setting-a-personal-access-token-policy-for-your-organization
 
 Also switch Resource Owner to the organization and not the user.
+This will require an approval from the org owner before the token becomes usable
+so make sure to wait for it before attempting to hit the API.
+
+To approve, your org owner will need to go to this URL:
+https://github.com/organizations/ORG/settings/personal-access-token-requests
 
 - Go to https://github.com/settings/tokens?type=beta
 - Click on *Generate new token*
@@ -35,7 +40,10 @@ Also switch Resource Owner to the organization and not the user.
 - Set the repository permissions to Worfklows: read and write
 - Leave the account permissions at No access for all scopes
 
-## 2. List all artifacts
+## 2. List all artifacts and loop over them calling the deletion endpoint
+
+This will cut through the rate limit a lot and if the number of artifacts is
+significant, it might be advisable to do this in several different sessions.
 
 Use the `per_page` query parameter to make sure to max out the GitHub API paging
 and not waste the rate limit.
@@ -45,16 +53,14 @@ include unrelated artifacts (from other workflows one might not wish to target)
 in the response.
 
 ```bash
-OWNER=
-REPO=
-PAT=
-NAME=
 curl -H "Authorization: Bearer $PAT https://api.github.com/repos/$OWNER/$REPO/actions/artifacts?per_page=100&name=NAME
 ```
 
-## 3. Loop over the artifacts and call the deletion endpoint for each
+I have implemented this in `index.js` and the secrets are stored in `pat.js`,
+`ownr.js` and `repo.js` which all just export a default string like so:
 
-This will cut through the rate limit a lot and if the number of artifacts is
-significant, it might be advisable to do this in several different sessions.
+```js
+export default '…';
+```
 
-TODO: Finish this once I have the organization PAT set up
+Run the script using `node .`.
