@@ -29,4 +29,5 @@ while (total === undefined || total > 0) {
 
   // Beep to signal batch completion (macOS only)
   child_process.exec('afplay /System/Library/Sounds/Glass.aiff');
+  child_process.exec(`say "${total - counter} left"`);
 }
